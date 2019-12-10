@@ -16,6 +16,7 @@ namespace PracticeRound1.Models
         public virtual DbSet<VwCourseStudentCount> VwCourseStudentCount { get; set; }
         public virtual DbSet<VwCourseStudents> VwCourseStudents { get; set; }
         public virtual DbSet<VwDepartmentCourseCount> VwDepartmentCourseCount { get; set; }
+        public virtual DbSet<DepartmentCourseCountVM> DepartmentCourseCountVM{ get; set; }
 
         public Contosouniversitypracticeround1Context(DbContextOptions<Contosouniversitypracticeround1Context> options) : base(options)
         {
@@ -211,6 +212,11 @@ namespace PracticeRound1.Models
                 entity.Property(e => e.DepartmentId).HasColumnName("DepartmentID");
 
                 entity.Property(e => e.Name).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<DepartmentCourseCountVM>(entity =>
+            {
+                entity.HasNoKey();
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -27,6 +27,13 @@ namespace PracticeRound1.Controllers
             return await _context.Department.ToListAsync();
         }
 
+        // GET: api/Departments/Course/Count
+        [HttpGet("Course/Count")]
+        public async Task<ActionResult<IEnumerable<DepartmentCourseCountVM>>> GetDepartmentCount()
+        {
+            return await _context.DepartmentCourseCountVM.FromSqlRaw("SELECT * FROM dbo.VwDepartmentCourseCount").ToListAsync();
+        }
+
         // GET: api/Departments/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Department>> GetDepartment(int id)
