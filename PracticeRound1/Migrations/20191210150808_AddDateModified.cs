@@ -21,25 +21,10 @@ namespace PracticeRound1.Migrations
                 name: "DateModified",
                 table: "Course",
                 nullable: true);
-
-            migrationBuilder.CreateTable(
-                name: "DepartmentCourseCountVM",
-                columns: table => new
-                {
-                    DepartmentID = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    CourseCount = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "DepartmentCourseCountVM");
-
             migrationBuilder.DropColumn(
                 name: "DateModified",
                 table: "Person");
