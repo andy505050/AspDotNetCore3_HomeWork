@@ -27,6 +27,20 @@ namespace PracticeRound1.Controllers
             return await _context.Course.ToListAsync();
         }
 
+        // GET: api/Courses/Students
+        [HttpGet("Students")]
+        public async Task<ActionResult<IEnumerable<VwCourseStudents>>> GetCourseStudents()
+        {
+            return await _context.VwCourseStudents.ToListAsync();
+        }
+
+        // GET: api/Courses
+        [HttpGet("Students/Count")]
+        public async Task<ActionResult<IEnumerable<VwCourseStudentCount>>> GetCourseStudentCount()
+        {
+            return await _context.VwCourseStudentCount.ToListAsync();
+        }
+
         // GET: api/Courses/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Course>> GetCourse(int id)
