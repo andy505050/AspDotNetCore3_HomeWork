@@ -24,7 +24,7 @@ namespace PracticeRound1.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Course>>> GetCourse()
         {
-            return await _context.Course.ToListAsync();
+            return await _context.Course.Where(x => x.IsDeleted != true).ToListAsync();
         }
 
         // GET: api/Courses/Students
@@ -45,7 +45,7 @@ namespace PracticeRound1.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Course>> GetCourse(int id)
         {
-            var course = await _context.Course.FindAsync(id);
+            var course = await _context.Course.Where(x => x.IsDeleted != true).FirstOrDefaultAsync(x => x.CourseId == id);
 
             if (course == null)
             {
@@ -109,7 +109,7 @@ namespace PracticeRound1.Controllers
                 return NotFound();
             }
 
-            _context.Course.Remove(course);
+            course.IsDeleted = true;
             await _context.SaveChangesAsync();
 
             return course;

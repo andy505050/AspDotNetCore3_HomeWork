@@ -24,7 +24,7 @@ namespace PracticeRound1.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Department>>> GetDepartment()
         {
-            return await _context.Department.ToListAsync();
+            return await _context.Department.Where(x => x.IsDeleted != true).ToListAsync();
         }
 
         // GET: api/Departments/Course/Count
@@ -38,7 +38,7 @@ namespace PracticeRound1.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Department>> GetDepartment(int id)
         {
-            var department = await _context.Department.FindAsync(id);
+            var department = await _context.Department.Where(x => x.IsDeleted != true).FirstOrDefaultAsync(x => x.DepartmentId == id);
 
             if (department == null)
             {
@@ -102,7 +102,7 @@ namespace PracticeRound1.Controllers
                 return NotFound();
             }
 
-            _context.Department.Remove(department);
+            department.IsDeleted = true;
             await _context.SaveChangesAsync();
 
             return department;
