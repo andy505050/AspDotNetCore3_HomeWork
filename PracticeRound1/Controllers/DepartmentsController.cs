@@ -52,30 +52,14 @@ namespace PracticeRound1.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDepartment(int id, Department department)
+        public async Task<IActionResult> PutDepartment(int id, Department dept)
         {
-            if (id != department.DepartmentId)
+            if (id != dept.DepartmentId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(department).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DepartmentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _context.Database.ExecuteSqlInterpolatedAsync($"EXEC dbo.Department_Update {dept.DepartmentId}, {dept.Name}, {dept.Budget}, {dept.StartDate}, {dept.InstructorId}, {dept.RowVersion}");
 
             return NoContent();
         }
@@ -84,12 +68,11 @@ namespace PracticeRound1.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Department>> PostDepartment(Department department)
+        public async Task<ActionResult<Department>> PostDepartment(Department dept)
         {
-            _context.Department.Add(department);
-            await _context.SaveChangesAsync();
+            await _context.Database.ExecuteSqlInterpolatedAsync($"EXEC dbo.Department_Insert {dept.Name}, {dept.Budget}, {dept.StartDate}, {dept.InstructorId}");
 
-            return CreatedAtAction("GetDepartment", new { id = department.DepartmentId }, department);
+            return CreatedAtAction("GetDepartment", new { id = dept.DepartmentId }, dept);
         }
 
         // DELETE: api/Departments/5
@@ -106,6 +89,21 @@ namespace PracticeRound1.Controllers
             await _context.SaveChangesAsync();
 
             return department;
+        }
+
+        // DELETE: api/Departments/5
+        [HttpDelete("SP/{id}")]
+        public async Task<ActionResult<Department>> DeleteDepartmentBySP(int id)
+        {
+            var dept = await _context.Department.FindAsync(id);
+            if (dept == null)
+            {
+                return NotFound();
+            }
+
+            await _context.Database.ExecuteSqlInterpolatedAsync($"EXEC dbo.Department_Delete {dept.DepartmentId}, {dept.RowVersion}");
+
+            return dept;
         }
 
         private bool DepartmentExists(int id)
