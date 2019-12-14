@@ -87,6 +87,43 @@ namespace PracticeRound1.Controllers
             return NoContent();
         }
 
+        [HttpPatch("Patch")]
+        public async Task<IActionResult> PatchCourse(CoursePatchVM coursePatch)
+        {
+            var course = _context.Course.Find(coursePatch.CourseId);
+
+            if (course == null)
+            {
+                return BadRequest();
+            }
+
+            if (!await TryUpdateModelAsync(coursePatch))
+            {
+                return BadRequest();
+            }
+
+            course.Title = coursePatch.Title;
+            course.Credits++;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CourseExists(coursePatch.CourseId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
         // POST: api/Courses
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
