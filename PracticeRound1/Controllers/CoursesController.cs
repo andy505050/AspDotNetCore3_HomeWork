@@ -10,6 +10,7 @@ using PracticeRound1.Models;
 namespace PracticeRound1.Controllers
 {
     [Route("api/[controller]")]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     [ApiController]
     public class CoursesController : ControllerBase
     {
