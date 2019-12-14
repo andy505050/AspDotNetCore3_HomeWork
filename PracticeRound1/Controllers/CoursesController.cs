@@ -56,6 +56,13 @@ namespace PracticeRound1.Controllers
             return course;
         }
 
+        // GET: api/Courses/5
+        [HttpGet("error")]
+        public IActionResult GetError(int id)
+        {
+            throw new Exception();
+        }
+
         // PUT: api/Courses/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
